@@ -1,8 +1,12 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.CurrencyConverter" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/product_blue</item>
+        <item name="colorSecondary">@color/product_blue</item>
+        <item name="colorPrimaryDark">@color/product_blue</item>
+        <item name="colorAccent">@color/product_blue</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="actionMenuTextAppearance">@style/ToolbarMenuTextAppearance</item>
     </style>
 
     <style name="Theme.CurrencyConverter" parent="Base.Theme.CurrencyConverter" />

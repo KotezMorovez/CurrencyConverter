@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="24dp">
+
+        <TextView
+            android:id="@+id/currency_name_text_view"
+            style="@style/TextPrimaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/value_to_convert_edit_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/value_to_convert_edit_text"
+            tools:text="EUR" />
+
+        <TextView
+            android:id="@+id/wallet_text_view"
+            style="@style/TextSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="You have: 100.00 eur" />
+
+        <TextView
+            android:id="@+id/symbol_text_view"
+            style="@style/TextPrimaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/value_to_convert_edit_text"
+            app:layout_constraintEnd_toStartOf="@+id/value_to_convert_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/value_to_convert_edit_text"
+            tools:text="–" />
+
+        <EditText
+            android:id="@+id/value_to_convert_edit_text"
+            style="@style/TextPrimaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@color/transparent"
+            android:hint="@string/card_value_hint"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@id/converter_value_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12312311" />
+
+        <TextView
+            android:id="@+id/converter_value_text_view"
+            style="@style/TextSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="1eur = 1eur" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

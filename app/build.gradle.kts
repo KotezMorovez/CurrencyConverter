@@ -27,6 +27,9 @@ android {
             )
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_19
         targetCompatibility = JavaVersion.VERSION_19
@@ -42,9 +45,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.viewbinding)
 
     // DI
     implementation(libs.dagger)
+    implementation(libs.androidx.lifecycle.runtime.android)
     ksp(libs.dagger.compiler)
 
     // NETWORK
