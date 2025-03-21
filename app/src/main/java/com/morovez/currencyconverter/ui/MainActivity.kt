@@ -2,9 +2,9 @@ package com.morovez.currencyconverter.ui
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -12,33 +12,50 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.morovez.currencyconverter.R
 import com.morovez.currencyconverter.databinding.ActivityMainBinding
-import com.morovez.currencyconverter.ui.adapters.CardAdapter
-import com.morovez.currencyconverter.ui.adapters.ItemDecoration
+import com.morovez.currencyconverter.di.AppComponentHolder
+import com.morovez.currencyconverter.di.ViewModelFactory
+import com.morovez.currencyconverter.ui.adapter.CardAdapter
+import com.morovez.currencyconverter.ui.adapter.ItemDecoration
 import com.morovez.currencyconverter.ui.common.collectWithLifecycle
+import com.morovez.currencyconverter.ui.model.EventInfo
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     private val viewBinding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private val viewModel by viewModels<MainViewModel>()
+
+    @Inject
+    lateinit var factory: ViewModelFactory<MainViewModel>
+    private val viewModel by lazy {
+        ViewModelProvider(this, factory)[MainViewModel::class.java]
+    }
 
     private val cardFromAdapter: CardAdapter by lazy {
-        CardAdapter { value: Float ->
-            viewModel.evaluate(value, true)
+        CardAdapter { value: String ->
+            viewModel.onTextInputChanged(value, true)
         }
     }
     private val cardToAdapter: CardAdapter by lazy {
-        CardAdapter { value: Float ->
-            viewModel.evaluate(value, false)
+        CardAdapter { value: String ->
+            viewModel.onTextInputChanged(value, false)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
+        AppComponentHolder.get().inject(this)
 
         initUI()
         observeData()
+
+        viewModel.initDataTimer()
+    }
+
+    override fun onDestroy() {
+        viewModel.stopDataTimer()
+        super.onDestroy()
     }
 
     private fun initUI() {
@@ -70,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                         val position =
                             linearLayoutManagerFrom.findFirstCompletelyVisibleItemPosition()
                         if (position in 0..<cardFromAdapter.itemCount) {
-                            viewModel.scrollEvent(true, position)
+                            viewModel.onScrolledToPosition(position, true)
                         }
                     }
                 }
@@ -85,8 +102,8 @@ class MainActivity : AppCompatActivity() {
                         super.onScrolled(recyclerView, dx, dy)
                         val position =
                             linearLayoutManagerTo.findFirstCompletelyVisibleItemPosition()
-                        if (position in 0..<cardFromAdapter.itemCount) {
-                            viewModel.scrollEvent(false, position)
+                        if (position in 0..<cardToAdapter.itemCount) {
+                            viewModel.onScrolledToPosition(position, false)
                         }
                     }
                 }
@@ -108,11 +125,10 @@ class MainActivity : AppCompatActivity() {
         recyclerView.addOnScrollListener(scrollListener)
     }
 
-
     private fun handleMenuItemClick(item: MenuItem) {
         when (item.itemId) {
             R.id.exchange -> {
-                viewModel.exchange()
+                viewModel.onExchangeButtonTap()
             }
 
             else -> Unit
@@ -120,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.stateFlow.collectWithLifecycle(this) { state: MainViewModel.State ->
+        viewModel.state.collectWithLifecycle(this) { state: MainViewModel.State ->
             cardFromAdapter.submitList(state.cardFromList)
             cardToAdapter.submitList(state.cardToList)
         }
@@ -138,7 +154,6 @@ class MainActivity : AppCompatActivity() {
                         eventInfo.walletCurrency,
                         eventInfo.walletBalance
                     )
-
                 } else {
                     resources.getText(R.string.replenishment_error)
                 }
@@ -149,7 +164,6 @@ class MainActivity : AppCompatActivity() {
                     eventInfo.allWalletsInfo
                 )
                 else ""
-
 
             MaterialAlertDialogBuilder(this, R.style.CustomAlert)
                 .setTitle(title)

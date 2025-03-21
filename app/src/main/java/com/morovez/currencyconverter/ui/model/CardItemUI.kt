@@ -1,4 +1,4 @@
-package com.morovez.currencyconverter.ui.adapters
+package com.morovez.currencyconverter.ui.model
 
 data class CardItemUI (
     val currencyName: String,

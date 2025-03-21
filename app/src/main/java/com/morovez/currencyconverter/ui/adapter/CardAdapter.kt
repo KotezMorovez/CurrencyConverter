@@ -1,4 +1,4 @@
-package com.morovez.currencyconverter.ui.adapters
+package com.morovez.currencyconverter.ui.adapter
 
 import android.os.Bundle
 import android.text.Editable
@@ -9,11 +9,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.morovez.currencyconverter.databinding.ItemCurrencyCardBinding
+import com.morovez.currencyconverter.ui.model.CardItemUI
 
 const val ARG_VALUE = "value"
 
 class CardAdapter(
-    private val onValueChangelistener: (Float) -> Unit
+    private val onValueChangelistener: (String) -> Unit
 ) : ListAdapter<CardItemUI, CardAdapter.ViewHolder>(CardDiffCallback()) {
     private val textWatcher: TextWatcher by lazy {
         object : TextWatcher {
@@ -22,7 +23,7 @@ class CardAdapter(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                onValueChangelistener.invoke(s?.ifEmpty { 0f }.toString().toFloat())
+                onValueChangelistener.invoke(s?.ifEmpty { 0f }.toString())
             }
         }
     }
@@ -58,11 +59,11 @@ class CardAdapter(
                 currencyNameTextView.text = item.currencyName
                 walletTextView.text = item.walletTotal
                 symbolTextView.text = item.symbol
-                symbolTextView.isVisible = item.currentValue.isNotEmpty()
                 converterValueTextView.text = item.relevantExchangeRate
 
                 valueToConvertEditText.removeTextChangedListener(textWatcher)
                 valueToConvertEditText.setText(item.currentValue)
+                valueToConvertEditText.setSelection(item.currentValue.length)
                 valueToConvertEditText.addTextChangedListener(textWatcher)
             }
         }
@@ -72,10 +73,11 @@ class CardAdapter(
                 val newValue = bundle.getString(ARG_VALUE)
 
                 with(binding) {
-                    symbolTextView.isVisible = newValue.isNullOrEmpty().not()
-
                     valueToConvertEditText.removeTextChangedListener(textWatcher)
                     valueToConvertEditText.setText(newValue)
+
+                    newValue?.let { valueToConvertEditText.setSelection(it.length) }
+
                     valueToConvertEditText.addTextChangedListener(textWatcher)
                 }
             }

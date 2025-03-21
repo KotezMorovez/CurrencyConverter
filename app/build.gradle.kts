@@ -47,6 +47,11 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.viewbinding)
 
+    //RxJava
+    implementation (libs.adapter.rxjava2)
+    implementation (libs.rxjava)
+    implementation (libs.rxandroid)
+
     // DI
     implementation(libs.dagger)
     implementation(libs.androidx.lifecycle.runtime.android)

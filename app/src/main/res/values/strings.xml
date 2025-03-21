@@ -4,6 +4,7 @@
     <string name="symbol_to">+</string>
     <string name="app_name">CurrencyConverter</string>
     <string name="card_value_hint">0</string>
+    <string name="card_wallet">You have: </string>
     <string name="replenishment_error">Insufficient fund for replenishment</string>
     <string name="receipt_message">Receipt %1$s to account %2$s.Available balance: %3$s </string>
     <string name="receipt_wallet_info">Available accounts:\n%1$s</string>

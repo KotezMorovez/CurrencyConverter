@@ -1,4 +1,4 @@
-package com.morovez.currencyconverter.ui.adapters
+package com.morovez.currencyconverter.ui.adapter
 
 import android.graphics.Rect
 import android.view.View

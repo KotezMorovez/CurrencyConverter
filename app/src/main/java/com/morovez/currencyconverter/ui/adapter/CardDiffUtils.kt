@@ -1,7 +1,8 @@
-package com.morovez.currencyconverter.ui.adapters
+package com.morovez.currencyconverter.ui.adapter
 
 import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
+import com.morovez.currencyconverter.ui.model.CardItemUI
 
 class CardDiffCallback: DiffUtil.ItemCallback<CardItemUI>(){
     override fun areItemsTheSame(oldItem: CardItemUI, newItem: CardItemUI): Boolean {
